@@ -49,5 +49,10 @@ class Test
 
         // Console.WriteLine($"Circle are is:{ans.ToString("F2")}");
 
+        // Use ternary operatior
+        //int a = 5, b = 6;
+        // int res = a > b ? a : b;
+        // Console.WriteLine(res);
+
     }
 }
