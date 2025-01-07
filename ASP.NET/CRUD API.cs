@@ -23,6 +23,7 @@ app.MapGet("/", () =>
 
 List<Category> categories = new List<Category>();
 
+
 app.MapGet("/api/categories", () =>
 {
     return Results.Ok(categories);
@@ -41,6 +42,8 @@ app.MapPost("/api/categories", () =>
     return Results.Created($"/api/categories/{New_category.CategoryId}", New_category);
 });
 
+
+
 app.MapDelete("/api/categories/{id}", (Guid id) =>
 {
     var foundCategory = categories.FirstOrDefault(category => category.CategoryId == id);
@@ -52,17 +55,25 @@ app.MapDelete("/api/categories/{id}", (Guid id) =>
     return Results.NoContent();
 });
 
+
+
 app.MapPut("/api/categories/{id}", (Guid id) =>
 {
+    Console.WriteLine($"Received PUT request for ID: {id}");
+
     var foundCategory = categories.FirstOrDefault(category => category.CategoryId == id);
     if (foundCategory == null)
     {
+        Console.WriteLine("Category not found.");
         return Results.NotFound("Category with this ID not found");
     }
+
+    Console.WriteLine($"Updating category with ID: {id}");
     foundCategory.Name = "Samsung";
     foundCategory.Description = "This is a type of Android Phone";
     return Results.NoContent();
 });
+
 
 app.Run();
 
