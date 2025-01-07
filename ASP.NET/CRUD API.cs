@@ -13,23 +13,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+// Check the apps working or not
 app.MapGet("/", () =>
 {
     return "App is working Well!!";
 });
 
 
-
+// Create a list
 List<Category> categories = new List<Category>();
 
-
+// Show now the array present situation
 app.MapGet("/api/categories", () =>
 {
     return Results.Ok(categories);
 });
 
-app.MapPost("/api/categories", () =>
+// Created a Manual array
+app.MapPost("/api/categories/AddManualData", () =>
 {
     var New_category = new Category
     {
@@ -42,8 +43,22 @@ app.MapPost("/api/categories", () =>
     return Results.Created($"/api/categories/{New_category.CategoryId}", New_category);
 });
 
+// create dinamically
+app.MapPost("/api/categories", () =>
+{
+    var New_category = new Category
+    {
+        CategoryId = Guid.NewGuid(),
+        Name = "Electronics",
+        Description = "This is a type of Electronics Device",
+        CreatedAt = DateTime.UtcNow,
+    };
+    categories.Add(New_category);
+    return Results.Created($"/api/categories/{New_category.CategoryId}", New_category);
+});
 
 
+// Delete 
 app.MapDelete("/api/categories/{id}", (Guid id) =>
 {
     var foundCategory = categories.FirstOrDefault(category => category.CategoryId == id);
@@ -56,7 +71,7 @@ app.MapDelete("/api/categories/{id}", (Guid id) =>
 });
 
 
-
+// Update
 app.MapPut("/api/categories/{id}", (Guid id) =>
 {
     Console.WriteLine($"Received PUT request for ID: {id}");
