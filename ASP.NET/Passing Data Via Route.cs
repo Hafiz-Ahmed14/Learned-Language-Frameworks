@@ -107,18 +107,22 @@ public record Category
 // Using Rest Client Api testing
 @Ecomerce_HostAddress = http://localhost:5272
 
+#Check that api is working or not
 GET http://localhost:5272
-
 ###
 
+
+#Check That what is the List Initial Situation
 GET http://localhost:5272/api/categories
-
 ###
 
+
+#Create a Manual Data and insert to List
 POST http://localhost:5272/api/categories/AddManualData
-
 ###
 
+
+#Pass Manual Data and insert to list
 POST http://localhost:5272/api/categories
 Content-Type: application/json
 
@@ -127,9 +131,10 @@ Content-Type: application/json
     "description": "It is a type of software"
 }
 
-
 ###
 
+
+#Update Data
 PUT http://localhost:5272/api/categories/12345678-1234-1234-1234-123456789abc
 Content-Type: application/json
 
@@ -140,6 +145,8 @@ Content-Type: application/json
 
 ###
 
+
+#Delete Data
 DELETE http://localhost:5272/api/categories/12345678-1234-1234-1234-123456789abc
 
 ###
