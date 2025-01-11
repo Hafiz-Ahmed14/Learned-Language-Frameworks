@@ -50,14 +50,14 @@ namespace Ecomerce.Controllers
             };
             categories.Add(New_category);
 
-            var CategoryList = categories.Select(c => new CategoryReadDto
+            var CategoryList = new CategoryReadDto
             {
                 CategoryId = New_category.CategoryId,
-                Name = c.Name,
-                Description = c.Description,
+                Name = New_category.Name,
+                Description = New_category.Description,
                 //CreatedAt = c.CreatedAt
-            }).ToList();
-            return Created($"/api/categories/{New_category.CategoryId}", ApiResponse<List<CategoryReadDto>>.SuccessResponse(CategoryList, 201, "Category Created Successfully"));
+            };
+            return Created($"/api/categories/{New_category.CategoryId}", ApiResponse<CategoryReadDto>.SuccessResponse(CategoryList, 201, "Category Created Successfully"));
         }
 
 
@@ -71,7 +71,7 @@ namespace Ecomerce.Controllers
             var foundCategory = categories.FirstOrDefault(category => category.CategoryId == id);
             if (foundCategory == null)
             {
-                return NotFound("Category with this ID not found");
+                return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category id doesn't Exits" }, 400, "Validation Failed"));
             }
             categories.Remove(foundCategory);
             return Ok(ApiResponse<object>.SuccessResponse(null, 204, "Category Deleted Successfully"));
@@ -86,36 +86,17 @@ namespace Ecomerce.Controllers
         public IActionResult UpdateCategories(Guid id, CategoryUpdateDto category_data)
         {
             Console.WriteLine($"Received PUT request for ID: {id}");
-            if (category_data == null)
-            {
-                return BadRequest("Category Data is Missing");
-            }
 
             var foundCategory = categories.FirstOrDefault(category => category.CategoryId == id);
             if (foundCategory == null)
             {
                 Console.WriteLine("Category not found.");
-                return NotFound("Category with this ID not found");
+                return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category is not found with this ID" }, 400, "Validation Failed"));
             }
 
+            foundCategory.Name = category_data.Name;
+            foundCategory.Description = category_data.Description;
 
-            if (!string.IsNullOrEmpty(category_data.Name))
-            {
-                if (category_data.Name.Length > 2)
-                {
-                    foundCategory.Name = category_data.Name;
-                }
-                else
-                {
-                    return BadRequest("You Must Enter the name of length is Minimum 3");
-                }
-
-            }
-
-            if (!string.IsNullOrWhiteSpace(category_data.Description))
-            {
-                foundCategory.Description = category_data.Description;
-            }
             return Ok(ApiResponse<object>.SuccessResponse(null, 204, "Update Category Successfully"));
         }
 
@@ -150,15 +131,15 @@ namespace Ecomerce.Controllers
                 CreatedAt = DateTime.UtcNow,
             };
             categories.Add(New_category);
-            var CategoryList = categories.Select(c => new CategoryReadDto
+            var CategoryList = new CategoryReadDto
             {
                 CategoryId = New_category.CategoryId,
-                Name = c.Name,
-                Description = c.Description,
+                Name = New_category.Name,
+                Description = New_category.Description,
                 //CreatedAt = c.CreatedAt
-            }).ToList();
+            };
 
-            return Created($"/api/categories/{New_category.CategoryId}", ApiResponse<List<CategoryReadDto>>.SuccessResponse(CategoryList, 201, "Category Created Successfully"));
+            return Created($"/api/categories/{New_category.CategoryId}", ApiResponse<CategoryReadDto>.SuccessResponse(CategoryList, 201, "Category Created Successfully"));
         }
 
     }
