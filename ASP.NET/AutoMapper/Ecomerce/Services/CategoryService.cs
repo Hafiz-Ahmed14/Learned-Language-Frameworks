@@ -68,8 +68,7 @@ namespace Ecomerce.Services
                 return null;
             }
 
-            foundCategory.Name = category_data.Name;
-            foundCategory.Description = category_data.Description;
+            _mapper.Map(category_data, foundCategory);
 
             return _mapper.Map<CategoryReadDto>(foundCategory);
         }
